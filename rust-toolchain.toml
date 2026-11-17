@@ -1,0 +1,6 @@
+# 锁定项目 Rust 工具链版本，与作者 README 要求一致
+# 通道：stable；目标三元组：MSVC（Windows 原生 ABI）
+[toolchain]
+channel = "stable"
+targets = ["x86_64-pc-windows-msvc"]
+profile = "minimal"

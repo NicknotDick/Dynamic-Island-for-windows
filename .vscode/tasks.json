@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "cargo build (debug)",
+      "type": "shell",
+      "command": "cargo build --locked --bin shenmidao",
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "cargo build (release)",
+      "type": "shell",
+      "command": "cargo build --locked --release --bin shenmidao",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "cargo test",
+      "type": "shell",
+      "command": "cargo test --locked --all-targets --features record -- --test-threads=1",
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "run shenmidao (release)",
+      "type": "shell",
+      "command": ".\\target\\release\\shenmidao.exe",
+      "problemMatcher": [],
+      "dependsOn": "cargo build (release)"
+    },
+    {
+      "label": "package (NSIS)",
+      "type": "shell",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\package.ps1",
+      "problemMatcher": []
+    }
+  ]
+}
