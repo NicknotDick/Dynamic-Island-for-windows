@@ -41,8 +41,9 @@ fn forced_compatible()->bool {
 }
 
 pub fn run(options:eframe::NativeOptions,launch:impl FnMut(eframe::NativeOptions)->eframe::Result<()>)->eframe::Result<()> {
-    // 上次崩在显卡 OpenGL 驱动里时，崩溃处理留下的标记会在这里转成设置。
-    let _=shenmidao::renderer::apply_pending_fallback();
+    // 崩溃标记的消费已前移到 main.rs::run() 开头（在单实例检查之前），
+    // 避免自动重启的新进程被互斥体挡住、提前返回时永远消费不到标记。
+    // 这里只读取已经落盘的兼容渲染设置。
     run_with(forced_compatible() || shenmidao::renderer::compat_requested(),options,launch)
 }
 

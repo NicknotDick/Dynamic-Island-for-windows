@@ -1037,6 +1037,11 @@ fn main() -> std::process::ExitCode {
 }
 
 fn run() -> eframe::Result<()> {
+    // 崩溃回退：必须在单实例检查之前消费标记文件。
+    // 自动重启的新进程可能被尚未退出的旧进程挡在 single_instance() 而提前返回，
+    // 若标记留到 graphics::run() 才处理就永远消费不到，导致回退失效。
+    // 这里先把标记转成设置并落盘，之后无论本次能否开窗，下次启动都会用兼容渲染。
+    let _ = shenmidao::renderer::apply_pending_fallback();
     // 自动重启或「立即重启」拉起的新进程：先等旧进程退出，再做单实例检查。
     diagnostics::wait_for_previous_instance();
     // 单实例（与原版同名互斥体）
